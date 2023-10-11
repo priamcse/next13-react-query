@@ -5,7 +5,9 @@ export interface HeroType {
 
 export const getHeroesData = async (): Promise<HeroType[]> => {
   try {
-    const response = await fetch("http://localhost:4001/superheroes");
+    const response = await fetch("http://localhost:4001/superheroes", {
+      cache: "no-cache",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch heroes");

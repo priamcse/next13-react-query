@@ -9,26 +9,17 @@ const HeroList = () => {
   });
   const queryClient = useQueryClient();
 
-  // DELETE
-  //   const deleteHeroMutation = useMutation(deleteHero, {
-  //     onMutate: (deletedHero) => {
-  //       // Update the cache optimistically to remove the hero
-  //       queryClient.setQueryData<HeroType[] | undefined>(
-  //         ["heroes"],
-  //         (existingHeroes) => {
-  //           return existingHeroes?.filter((hero) => hero.id !== deletedHero.id);
-  //         }
-  //       );
-  //     },
-
-  //     onSuccess: () => {
-  //       // Invalidates cache and refetch
-  //       queryClient.invalidateQueries(["heroes"]);
-  //     },
-  //   });
-
   const deleteHeroMutation = useMutation({
     mutationFn: deleteHero,
+    // onMutate: (deletedHero) => {
+    //   // Update the cache optimistically to remove the hero
+    //   queryClient.setQueryData<HeroType[] | undefined>(
+    //     ["heroes"],
+    //     (existingHeroes) => {
+    //       return existingHeroes?.filter((hero) => hero.id !== deletedHero.id);
+    //     }
+    //   );
+    // },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["heroes"] });
       // queryClient.invalidateQueries({ queryKey: ['reminders'] })
