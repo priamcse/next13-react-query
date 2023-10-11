@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { HeroType, getHeroesData } from "@/lib/heroActions";
+import { HeroType, deleteHero, getHeroesData } from "@/lib/heroActions";
 
 const HeroList = () => {
   const { data, isLoading } = useQuery<HeroType[]>({
@@ -8,6 +8,32 @@ const HeroList = () => {
     queryFn: getHeroesData,
   });
   const queryClient = useQueryClient();
+
+  // DELETE
+  //   const deleteHeroMutation = useMutation(deleteHero, {
+  //     onMutate: (deletedHero) => {
+  //       // Update the cache optimistically to remove the hero
+  //       queryClient.setQueryData<HeroType[] | undefined>(
+  //         ["heroes"],
+  //         (existingHeroes) => {
+  //           return existingHeroes?.filter((hero) => hero.id !== deletedHero.id);
+  //         }
+  //       );
+  //     },
+
+  //     onSuccess: () => {
+  //       // Invalidates cache and refetch
+  //       queryClient.invalidateQueries(["heroes"]);
+  //     },
+  //   });
+
+  const deleteHeroMutation = useMutation({
+    mutationFn: deleteHero,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["heroes"] });
+      // queryClient.invalidateQueries({ queryKey: ['reminders'] })
+    },
+  });
 
   //   Loading
   if (isLoading) return <div>Loading...</div>;
@@ -22,7 +48,12 @@ const HeroList = () => {
             className="px-3 py-2 border rounded-md flex space-x-2"
           >
             <p>{item.name}</p>
-            <div>x</div>
+            <div
+              onClick={() => deleteHeroMutation.mutate(item)}
+              className="cursor-pointer"
+            >
+              x
+            </div>
           </div>
         ))}
       </div>

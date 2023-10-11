@@ -5,7 +5,7 @@ export interface HeroType {
 
 export const getHeroesData = async (): Promise<HeroType[]> => {
   try {
-    const response = await fetch("http://localhost:4000/superheroes");
+    const response = await fetch("http://localhost:4001/superheroes");
 
     if (!response.ok) {
       throw new Error("Failed to fetch heroes");
@@ -20,7 +20,7 @@ export const getHeroesData = async (): Promise<HeroType[]> => {
 
 export const addHero = async (heroData: HeroType): Promise<HeroType> => {
   try {
-    const response = await fetch("http://localhost:4000/superheroes", {
+    const response = await fetch("http://localhost:4001/superheroes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const updateHero = async (
   updatedHeroData: HeroType
 ): Promise<HeroType> => {
   try {
-    const response = await fetch(`http://localhost:4000/superheroes/${id}`, {
+    const response = await fetch(`http://localhost:4001/superheroes/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -63,11 +63,14 @@ export const updateHero = async (
   }
 };
 
-export const deleteHero = async (id: number | string): Promise<HeroType> => {
+export const deleteHero = async (heroData: HeroType): Promise<HeroType> => {
   try {
-    const response = await fetch(`http://localhost:4000/superheroes/${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `http://localhost:4001/superheroes/${heroData.id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to delete hero");
